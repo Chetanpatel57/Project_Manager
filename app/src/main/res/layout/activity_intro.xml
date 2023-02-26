@@ -23,7 +23,7 @@
         android:layout_height="217dp"
         android:layout_marginTop="@dimen/intro_screen_image_marginTop"
         android:contentDescription="@string/image_contentDescription"
-        android:src="@drawable/project_manager" />
+        android:src="@drawable/proman" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         android:gravity="center"
         android:lineSpacingExtra="@dimen/intro_text_line_spacing_extra"
         android:text="@string/intro_text_description"
-        android:textColor="@color/DarkPrimaryColor"
+        android:textColor="@color/white"
         android:textSize="@dimen/intro_text_size" />
 
     <Button
