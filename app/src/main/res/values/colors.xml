@@ -10,4 +10,8 @@
     <color name="PrimaryColor">#A1ACCC</color>
     <color name="DarkPrimaryColor">#0B2C91</color>
     <color name="Color">#4CA189</color>
+
+    <color name="text_color_one">#363A43</color>
+    <color name="text_color_two">#767B81</color>
+
 </resources>
