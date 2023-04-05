@@ -5,9 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.projemanag.activities.MainActivity
-import com.projemanag.activities.SignInActivity
-import com.projemanag.activities.SignUpActivity
+import com.projemanag.activities.*
 import com.projemanag.model.User
 import com.projemanag.utils.Constants
 
@@ -61,7 +59,9 @@ class FirestoreClass {
                         is MainActivity -> {
                             activity.updateNavigationUserDetails(loggedInUser)
                         }
-                        // END
+                        is MyProfileActivity -> {
+                            activity.setUserDataInUI(loggedInUser)
+                        }
                     }
                     // END
                 }
@@ -71,6 +71,9 @@ class FirestoreClass {
                             activity.hideProgressDialog()
                         }
                         is MainActivity -> {
+                            activity.hideProgressDialog()
+                        }
+                        is BaseActivity -> {
                             activity.hideProgressDialog()
                         }
                         // END
