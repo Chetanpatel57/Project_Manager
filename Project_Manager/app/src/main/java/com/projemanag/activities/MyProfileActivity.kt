@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -21,26 +20,28 @@ import com.projemanag.firebase.FirestoreClass
 import com.projemanag.model.User
 import com.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_my_profile.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
 
+    // Add a global variable for URI of a selected image from phone storage.
     private var mSelectedImageFileUri: Uri? = null
-    private lateinit var mUserDetails: User
-    private var mProfileImageURL: String = ""
 
-    companion object {
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
-    }
+    // START
+    // A global variable for user details.
+    private lateinit var mUserDetails: User
+
+    // A global variable for a user profile image URL
+    private var mProfileImageURL: String = ""
+    // END
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_profile)
 
         setupActionBar()
 
-        FirestoreClass().signInUser(this@MyProfileActivity)
+        FirestoreClass().loadUserData(this@MyProfileActivity)
 
         iv_profile_user_image.setOnClickListener {
 
@@ -59,6 +60,8 @@ class MyProfileActivity : BaseActivity() {
                 )
             }
         }
+
+        // START
         btn_update.setOnClickListener {
 
             // Here if the image is not selected then update the other details of user.
@@ -73,6 +76,7 @@ class MyProfileActivity : BaseActivity() {
                 updateUserProfileData()
             }
         }
+        // END
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,7 +86,7 @@ class MyProfileActivity : BaseActivity() {
             && data!!.data != null
         ) {
             // The uri of selection image from phone storage.
-            mSelectedImageFileUri = data.data
+            mSelectedImageFileUri = data.data!!
 
             try {
                 // Load the user image in the ImageView.
@@ -98,6 +102,7 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -107,9 +112,7 @@ class MyProfileActivity : BaseActivity() {
         if (requestCode == READ_STORAGE_PERMISSION_CODE) {
             //If permission is granted
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // START
                 showImageChooser()
-                // END
             } else {
                 //Displaying another toast if permission is not granted
                 Toast.makeText(
@@ -120,6 +123,7 @@ class MyProfileActivity : BaseActivity() {
             }
         }
     }
+
 
     private fun setupActionBar() {
 
@@ -134,7 +138,13 @@ class MyProfileActivity : BaseActivity() {
 
         toolbar_my_profile_activity.setNavigationOnClickListener { onBackPressed() }
     }
+
+
     fun setUserDataInUI(user: User) {
+
+
+        mUserDetails = user
+
         Glide
             .with(this@MyProfileActivity)
             .load(user.image)
@@ -149,43 +159,17 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    fun profileUpdateSuccess() {
-
-        hideProgressDialog()
-
-        finish()
-    }
 
     private fun showImageChooser() {
+        // An intent for launching the image selection of phone storage.
         val galleryIntent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
+        // Launches the image selection of phone storage using the constant code.
         startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
     }
-    private fun updateUserProfileData() {
 
-        val userHashMap = HashMap<String, Any>()
-
-        if (mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {
-            userHashMap[Constants.IMAGE] = mProfileImageURL
-        }
-
-        if (et_name.text.toString() != mUserDetails.name) {
-            userHashMap[Constants.NAME] = et_name.text.toString()
-        }
-
-        if (et_mobile.text.toString() != mUserDetails.mobile.toString()) {
-            userHashMap[Constants.MOBILE] = et_mobile.text.toString().toLong()
-        }
-
-        // Update the data in the database.
-        FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
-    }
-
-    private fun getFileExtension(uri: Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
-    }
 
     private fun uploadUserImage() {
 
@@ -231,5 +215,48 @@ class MyProfileActivity : BaseActivity() {
                     hideProgressDialog()
                 }
         }
+    }
+
+
+    private fun getFileExtension(uri: Uri?): String? {
+
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
+    }
+    private fun updateUserProfileData() {
+
+        val userHashMap = HashMap<String, Any>()
+
+        if (mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {
+            userHashMap[Constants.IMAGE] = mProfileImageURL
+        }
+
+        if (et_name.text.toString() != mUserDetails.name) {
+            userHashMap[Constants.NAME] = et_name.text.toString()
+        }
+
+        if (et_mobile.text.toString() != mUserDetails.mobile.toString()) {
+            userHashMap[Constants.MOBILE] = et_mobile.text.toString().toLong()
+        }
+
+        // Update the data in the database.
+        FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
+    }
+    // END
+
+
+    fun profileUpdateSuccess() {
+
+        hideProgressDialog()
+
+        finish()
+    }
+    // END
+
+
+    companion object {
+        //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult
+        private const val READ_STORAGE_PERMISSION_CODE = 1
+
+        private const val PICK_IMAGE_REQUEST_CODE = 2
     }
 }

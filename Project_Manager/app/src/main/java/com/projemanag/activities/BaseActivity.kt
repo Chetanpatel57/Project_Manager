@@ -15,11 +15,13 @@ open class BaseActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
 
+
     private lateinit var mProgressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     fun showProgressDialog(text: String) {
         mProgressDialog = Dialog(this)
@@ -33,6 +35,7 @@ open class BaseActivity : AppCompatActivity() {
         //Start the dialog and display it on screen.
         mProgressDialog.show()
     }
+
 
     fun hideProgressDialog() {
         mProgressDialog.dismiss()

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
@@ -18,6 +17,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //This call the parent constructor
         super.onCreate(savedInstanceState)
@@ -25,15 +25,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // This is used to align the xml view to this class
         setContentView(R.layout.activity_main)
 
-
         setupActionBar()
 
+        // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         nav_view.setNavigationItemSelectedListener(this)
 
-        FirestoreClass().signInUser(this@MainActivity)
+
+        // Get the current logged in user details.
+        FirestoreClass().loadUserData(this@MainActivity)
     }
 
-    // START
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
@@ -42,14 +43,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             doubleBackToExit()
         }
     }
-    // END
 
-    // START
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        // START
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-
                 startActivity(Intent(this@MainActivity, MyProfileActivity::class.java))
             }
 
@@ -65,27 +62,21 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
-        // END
         return true
     }
-    // END
 
-    // START
 
     private fun setupActionBar() {
 
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
-        // START
         toolbar_main_activity.setNavigationOnClickListener {
             toggleDrawer()
         }
-        // END
     }
-    // END
 
-    // START
+
     private fun toggleDrawer() {
 
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -94,7 +85,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             drawer_layout.openDrawer(GravityCompat.START)
         }
     }
-    // END
+
+
     fun updateNavigationUserDetails(user: User) {
         // The instance of the header view of the navigation view.
         val headerView = nav_view.getHeaderView(0)

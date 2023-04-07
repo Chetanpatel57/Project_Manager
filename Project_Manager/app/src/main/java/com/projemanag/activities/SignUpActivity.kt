@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : BaseActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //This call the parent constructor
         super.onCreate(savedInstanceState)
@@ -35,6 +36,7 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+
     private fun setupActionBar() {
 
         setSupportActionBar(toolbar_sign_up_activity)
@@ -47,6 +49,7 @@ class SignUpActivity : BaseActivity() {
 
         toolbar_sign_up_activity.setNavigationOnClickListener { onBackPressed() }
     }
+
 
     private fun registerUser() {
         // Here we get the text from editText and trim the space
@@ -107,6 +110,7 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+
     fun userRegisteredSuccess() {
 
         Toast.makeText(
@@ -117,6 +121,7 @@ class SignUpActivity : BaseActivity() {
 
         // Hide the progress dialog
         hideProgressDialog()
+
 
         FirebaseAuth.getInstance().signOut()
         // Finish the Sign-Up Screen
