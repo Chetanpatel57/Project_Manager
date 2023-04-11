@@ -32,7 +32,6 @@ class SignInActivity : BaseActivity() {
         }
     }
 
-
     private fun setupActionBar() {
 
         setSupportActionBar(toolbar_sign_in_activity)
@@ -45,7 +44,6 @@ class SignInActivity : BaseActivity() {
 
         toolbar_sign_in_activity.setNavigationOnClickListener { onBackPressed() }
     }
-
 
     private fun signInRegisteredUser() {
         // Here we get the text from editText and trim the space
@@ -85,7 +83,6 @@ class SignInActivity : BaseActivity() {
             true
         }
     }
-
 
     fun signInSuccess(user: User) {
 

@@ -122,7 +122,6 @@ class SignUpActivity : BaseActivity() {
         // Hide the progress dialog
         hideProgressDialog()
 
-
         FirebaseAuth.getInstance().signOut()
         // Finish the Sign-Up Screen
         finish()

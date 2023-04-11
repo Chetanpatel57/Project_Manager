@@ -15,19 +15,15 @@ open class BaseActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
 
-
     private lateinit var mProgressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-
     fun showProgressDialog(text: String) {
         mProgressDialog = Dialog(this)
 
-        /*Set the screen content from a layout resource.
-        The resource will be inflated, adding all top-level views to the screen.*/
         mProgressDialog.setContentView(R.layout.dialog_progress)
 
         mProgressDialog.tv_progress_text.text = text
@@ -74,4 +70,3 @@ open class BaseActivity : AppCompatActivity() {
         snackBar.show()
     }
 }
-// END
